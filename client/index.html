@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syledger - Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Syledger</h1>
+
+        <!-- Login Form -->
+        <div id="loginForm">
+            <h2>Login</h2>
+            <input type="text" id="loginUsername" placeholder="Username" required>
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <button onclick="login()">Login</button>
+            <p>Don't have an account? <a href="#" onclick="toggleForm()">Sign up</a></p>
+        </div>
+
+        <!-- Signup Form (Hidden by Default) -->
+        <div id="signupForm" style="display: none;">
+            <h2>Sign Up</h2>
+            <input type="text" id="signupUsername" placeholder="Username" required>
+            <input type="password" id="signupPassword" placeholder="Password" required>
+            <button onclick="signup()">Sign Up</button>
+            <p>Already have an account? <a href="#" onclick="toggleForm()">Login</a></p>
+        </div>
+    </div>
+
+    <script>
+        function toggleForm() {
+            document.getElementById("loginForm").style.display = 
+                document.getElementById("loginForm").style.display === "none" ? "block" : "none";
+            document.getElementById("signupForm").style.display = 
+                document.getElementById("signupForm").style.display === "none" ? "block" : "none";
+        }
+
+        async function login() {
+            const username = document.getElementById("loginUsername").value;
+            const password = document.getElementById("loginPassword").value;
+
+            const response = await fetch("/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password })
+            });
+
+            if (response.ok) {
+                window.location.href = "chat.html"; // Redirect to chat
+            } else {
+                alert("Login failed!");
+            }
+        }
+
+        async function signup() {
+            const username = document.getElementById("signupUsername").value;
+            const password = document.getElementById("signupPassword").value;
+
+            const response = await fetch("/signup", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password })
+            });
+
+            if (response.ok) {
+                alert("Signup successful! Please log in.");
+                toggleForm();
+            } else {
+                alert("Signup failed!");
+            }
+        }
+    </script>
+</body>
+</html>

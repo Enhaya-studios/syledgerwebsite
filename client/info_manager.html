@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syledger - Info Manager</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="info-container">
+        <button class="back-btn" onclick="goBack()">⬅ Back</button>
+        <h1>Info Manager</h1>
+        
+        <label for="siteName">Site Name:</label>
+        <input type="text" id="siteName">
+
+        <label for="siteUsername">Username/Email:</label>
+        <input type="text" id="siteUsername">
+
+        <label for="sitePassword">Password:</label>
+        <input type="password" id="sitePassword">
+
+        <button onclick="saveLogin()">Save Login</button>
+        <div id="savedLogins"></div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.location.href = "chat.html";
+        }
+
+        function saveLogin() {
+            const siteName = document.getElementById("siteName").value;
+            const siteUsername = document.getElementById("siteUsername").value;
+            const sitePassword = document.getElementById("sitePassword").value;
+
+            if (siteName && siteUsername && sitePassword) {
+                const savedDiv = document.getElementById("savedLogins");
+                const entry = document.createElement("p");
+                entry.textContent = `📌 ${siteName}: ${siteUsername} / ${sitePassword}`;
+                savedDiv.appendChild(entry);
+
+                // Optionally, save data to backend (if you have an API for it)
+            }
+        }
+    </script>
+</body>
+</html>

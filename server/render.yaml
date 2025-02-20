@@ -1,0 +1,14 @@
+services:
+  - name: syledger-backend
+    type: web
+    env: node
+    buildCommand: "npm install"
+    startCommand: "node server.js"
+    envVars:
+      - key: PORT
+        value: 10000  # Render assigns a dynamic port, set this if needed
+
+  - name: syledger-frontend
+    type: static
+    buildCommand: ""
+    staticPublishPath: "/frontend"
