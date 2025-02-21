@@ -6,7 +6,8 @@ services:
     startCommand: "node server.js"
     envVars:
       - key: PORT
-        value: 10000  # Render assigns a dynamic port, set this if needed
+        value: "8080"
+
 
   - name: syledger-frontend
     type: static

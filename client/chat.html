@@ -16,26 +16,19 @@
     </div>
 
     <script>
-        const socket = new WebSocket("wss://syledger-backend.onrender.com"); // Replace with Render WebSocket URL
+        const socket = new WebSocket("wss://syledger-ws.onrender.com"); // ✅ Use WebSocket URL
 
-        socket.onmessage = (event) => {
-            const messagesDiv = document.getElementById("messages");
-            const message = document.createElement("p");
-            message.textContent = event.data;
-            messagesDiv.appendChild(message);
-        };
+socket.onopen = () => {
+    console.log("Connected to WebSocket server.");
+};
 
-        function sendMessage() {
-            const input = document.getElementById("messageInput");
-            if (input.value.trim() !== "") {
-                socket.send(input.value);
-                input.value = "";
-            }
-        }
+socket.onmessage = (event) => {
+    const chatBox = document.getElementById("chatBox");
+    chatBox.innerHTML += `<p>${event.data}</p>`;
+};
 
-        function openInfoManager() {
-            window.location.href = "info_manager.html";
-        }
-    </script>
-</body>
-</html>
+function sendMessage() {
+    const message = document.getElementById("messageInput").value;
+    socket.send(message);
+    document.getElementById("messageInput").value = "";
+}
