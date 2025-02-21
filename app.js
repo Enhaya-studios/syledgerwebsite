@@ -1,20 +1,18 @@
-const ws = new WebSocket("wss://syledger-backend.onrender.com"); // Use your WebSocket URL
+const express = require("express");
+const cors = require("cors");
 
-ws.onopen = () => {
-    console.log("Connected to WebSocket server.");
-};
+const app = express();
+const PORT = process.env.PORT || 10000; // Render assigns a port dynamically
 
-ws.onmessage = (event) => {
-    const messages = document.getElementById("messages");
-    const message = document.createElement("div");
-    message.textContent = event.data;
-    messages.appendChild(message);
-};
+app.use(cors()); // Allow cross-origin requests
+app.use(express.json()); // Enable JSON parsing
 
-function sendMessage() {
-    const input = document.getElementById("message");
-    if (input.value.trim() !== "") {
-        ws.send(input.value);
-        input.value = "";
-    }
-}
+// Sample API route
+app.get("/", (req, res) => {
+  res.send("Syledger API is running!");
+});
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Syledger API is running on port ${PORT}`);
+});
