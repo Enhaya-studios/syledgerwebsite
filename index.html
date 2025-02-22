@@ -3,84 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Syledger - Login</title>
+    <title>Syledger</title>
     <style>
         body {
-            background-color: #1e1e1e;
+            background-color: #121212;
             color: white;
             font-family: Arial, sans-serif;
             text-align: center;
-            margin: 0;
-            padding: 0;
         }
-        .container {
-            margin-top: 10vh;
-        }
-        h1 {
-            font-size: 2rem;
-        }
-        .input-box {
-            margin: 10px 0;
-        }
-        input {
-            padding: 10px;
-            font-size: 1rem;
-            width: 250px;
-            background-color: #333;
-            border: 1px solid #444;
-            color: white;
-        }
-        .btn {
-            background-color: #007bff;
+        button {
+            background-color: #1e1e1e;
             color: white;
             border: none;
-            padding: 10px 20px;
-            font-size: 1rem;
-            margin-top: 10px;
+            padding: 10px;
+            margin: 5px;
             cursor: pointer;
-            border-radius: 5px;
         }
-        .btn:hover {
-            background-color: #0056b3;
-        }
-        .toggle {
-            margin-top: 20px;
-            cursor: pointer;
-            color: #ccc;
-            text-decoration: underline;
+        input {
+            padding: 8px;
+            margin: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to Syledger</h1>
-
-        <!-- Login Form -->
-        <div id="loginForm">
-            <h2>Login</h2>
-            <div class="input-box">
-                <input type="text" id="loginUsername" placeholder="Username">
-            </div>
-            <div class="input-box">
-                <input type="password" id="loginPassword" placeholder="Password">
-            </div>
-            <button class="btn" onclick="login()">Login</button>
-            <p class="toggle" onclick="toggleForm()">Don't have an account? Sign up</p>
-        </div>
-
-        <!-- Signup Form (Hidden by Default) -->
-        <div id="signupForm" style="display: none;">
-            <h2>Sign Up</h2>
-            <div class="input-box">
-                <input type="text" id="signupUsername" placeholder="Username">
-            </div>
-            <div class="input-box">
-                <input type="password" id="signupPassword" placeholder="Password">
-            </div>
-            <button class="btn" onclick="signup()">Sign Up</button>
-            <p class="toggle" onclick="toggleForm()">Already have an account? Log in</p>
-        </div>
+    <h1>Welcome to Syledger</h1>
+    
+    <!-- Login Form -->
+    <div id="loginForm">
+        <h2>Login</h2>
+        <input type="text" id="loginUsername" placeholder="Username">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button onclick="login()">Login</button>
     </div>
+
+    <!-- Signup Form -->
+    <div id="signupForm" style="display:none;">
+        <h2>Signup</h2>
+        <input type="text" id="signupUsername" placeholder="Username">
+        <input type="password" id="signupPassword" placeholder="Password">
+        <button onclick="signup()">Signup</button>
+    </div>
+
+    <button onclick="toggleForm()">Switch to Signup/Login</button>
+
+    <button onclick="openInfoManager()">Info Manager</button>
 
     <script>
         async function login() {
@@ -121,6 +87,7 @@
         function toggleForm() {
             const loginForm = document.getElementById("loginForm");
             const signupForm = document.getElementById("signupForm");
+
             if (loginForm.style.display === "none") {
                 loginForm.style.display = "block";
                 signupForm.style.display = "none";
@@ -128,6 +95,10 @@
                 loginForm.style.display = "none";
                 signupForm.style.display = "block";
             }
+        }
+
+        function openInfoManager() {
+            window.location.href = "info_manager.html"; 
         }
     </script>
 </body>

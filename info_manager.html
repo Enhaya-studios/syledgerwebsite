@@ -3,46 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Syledger - Info Manager</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Info Manager - Syledger</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        button {
+            background-color: #1e1e1e;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            width: 80%;
+        }
+        #savedLogins {
+            margin-top: 20px;
+            text-align: left;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
 </head>
 <body>
-    <div class="info-container">
-        <button class="back-btn" onclick="goBack()">⬅ Back</button>
-        <h1>Info Manager</h1>
-        
-        <label for="siteName">Site Name:</label>
-        <input type="text" id="siteName">
+    <h1>Info Manager</h1>
+    <button onclick="goBack()">⬅ Back to Chat</button>
 
-        <label for="siteUsername">Username/Email:</label>
-        <input type="text" id="siteUsername">
+    <h2>Save Login Info</h2>
+    <input type="text" id="siteName" placeholder="Website Name">
+    <input type="text" id="siteUsername" placeholder="Username/Email">
+    <input type="password" id="sitePassword" placeholder="Password">
+    <button onclick="saveLogin()">Save</button>
 
-        <label for="sitePassword">Password:</label>
-        <input type="password" id="sitePassword">
-
-        <button onclick="saveLogin()">Save Login</button>
-        <div id="savedLogins"></div>
-    </div>
+    <h2>Saved Logins</h2>
+    <div id="savedLogins"></div>
 
     <script>
         function goBack() {
-            window.location.href = "chat.html";
+            window.location.href = "chat.html"; 
         }
 
-        function saveLogin() {
+        async function saveLogin() {
             const siteName = document.getElementById("siteName").value;
             const siteUsername = document.getElementById("siteUsername").value;
             const sitePassword = document.getElementById("sitePassword").value;
 
-            if (siteName && siteUsername && sitePassword) {
-                const savedDiv = document.getElementById("savedLogins");
-                const entry = document.createElement("p");
-                entry.textContent = `📌 ${siteName}: ${siteUsername} / ${sitePassword}`;
-                savedDiv.appendChild(entry);
+            if (!siteName || !siteUsername || !sitePassword) {
+                alert("Please fill out all fields.");
+                return;
+            }
 
-                // Optionally, save data to backend (if you have an API for it)
+            const response = await fetch("https://syledger-api.onrender.com/saveLogin", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ siteName, siteUsername, sitePassword })
+            });
+
+            if (response.ok) {
+                alert("Login saved!");
+                loadLogins();
+            } else {
+                alert("Failed to save login.");
             }
         }
+
+        async function loadLogins() {
+            const response = await fetch("https://syledger-api.onrender.com/getLogins");
+            if (response.ok) {
+                const logins = await response.json();
+                const savedLoginsDiv = document.getElementById("savedLogins");
+                savedLoginsDiv.innerHTML = "";
+
+                logins.forEach(login => {
+                    const loginEntry = document.createElement("div");
+                    loginEntry.innerHTML = `<strong>${login.siteName}</strong>: ${login.siteUsername}`;
+                    savedLoginsDiv.appendChild(loginEntry);
+                });
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadLogins);
     </script>
 </body>
 </html>
