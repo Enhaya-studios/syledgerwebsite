@@ -10,87 +10,85 @@
             color: white;
             font-family: Arial, sans-serif;
             text-align: center;
+            margin: 0;
+            padding: 20px;
         }
-        button {
-            background-color: #1e1e1e;
-            color: white;
-            border: none;
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+        input, button {
+            width: 100%;
             padding: 10px;
-            margin: 5px;
-            cursor: pointer;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
         }
         input {
-            padding: 8px;
-            margin: 5px;
-            width: 80%;
+            background: #333;
+            color: white;
         }
-        #savedLogins {
-            margin-top: 20px;
-            text-align: left;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
+        button {
+            background-color: #6200ea;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #3700b3;
         }
     </style>
 </head>
 <body>
-    <h1>Info Manager</h1>
-    <button onclick="goBack()">⬅ Back to Chat</button>
 
-    <h2>Save Login Info</h2>
-    <input type="text" id="siteName" placeholder="Website Name">
-    <input type="text" id="siteUsername" placeholder="Username/Email">
-    <input type="password" id="sitePassword" placeholder="Password">
-    <button onclick="saveLogin()">Save</button>
+    <h2>Info Manager</h2>
 
-    <h2>Saved Logins</h2>
-    <div id="savedLogins"></div>
+    <div class="container">
+        <input type="text" id="site" placeholder="Website Name">
+        <input type="text" id="username" placeholder="Username/Email">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="saveLogin()">Save Login</button>
+        <button onclick="goBack()">Back</button>
+    </div>
 
     <script>
-        function goBack() {
-            window.location.href = "chat.html"; 
-        }
-
         async function saveLogin() {
-            const siteName = document.getElementById("siteName").value;
-            const siteUsername = document.getElementById("siteUsername").value;
-            const sitePassword = document.getElementById("sitePassword").value;
+            const site = document.getElementById("site").value.trim();
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value.trim();
 
-            if (!siteName || !siteUsername || !sitePassword) {
-                alert("Please fill out all fields.");
+            if (!site || !username || !password) {
+                alert("Please fill in all fields!");
                 return;
             }
 
-            const response = await fetch("https://syledger-api.onrender.com/saveLogin", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ siteName, siteUsername, sitePassword })
-            });
-
-            if (response.ok) {
-                alert("Login saved!");
-                loadLogins();
-            } else {
-                alert("Failed to save login.");
-            }
-        }
-
-        async function loadLogins() {
-            const response = await fetch("https://syledger-api.onrender.com/getLogins");
-            if (response.ok) {
-                const logins = await response.json();
-                const savedLoginsDiv = document.getElementById("savedLogins");
-                savedLoginsDiv.innerHTML = "";
-
-                logins.forEach(login => {
-                    const loginEntry = document.createElement("div");
-                    loginEntry.innerHTML = `<strong>${login.siteName}</strong>: ${login.siteUsername}`;
-                    savedLoginsDiv.appendChild(loginEntry);
+            try {
+                const response = await fetch("https://syledger-api.onrender.com/save-login", { // ✅ Correct API URL
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ site, username, password })
                 });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert("Login saved successfully!");
+                } else {
+                    alert("Failed to save login: " + result.error);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Failed to connect to server.");
             }
         }
 
-        document.addEventListener("DOMContentLoaded", loadLogins);
+        function goBack() {
+            window.location.href = "chat.html"; // ✅ Redirects back to chat
+        }
     </script>
+
 </body>
 </html>
